@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 00:47:24 by svogrig           #+#    #+#             */
-/*   Updated: 2024/05/02 20:35:07 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/06/19 16:10:04 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,21 +24,29 @@
 # define SUCCESS 0
 # define FAILURE 1
 
-# define LONG_MAX_DIV_10 922337203685477580
-# define LONG_MAX_LAST_DIGIT 7
+typedef int t_bool;
+
+/* arg -----------------------------------------------------------------------*/
+
+typedef struct s_arg{
+	unsigned long	nbr_philo;
+	suseconds_t		time_die;
+	suseconds_t		time_eat;
+	suseconds_t		time_sleep;
+	unsigned long			nbr_eat;
+}	t_arg;
+
+void	arg_print(t_arg *data);
+void	arg_init(int argc, char **argv, t_arg *arg);
 
 /* data ----------------------------------------------------------------------*/
 
-typedef struct s_phidata{
-	long		nbr_philo;
-	suseconds_t	time_die;
-	suseconds_t	time_eat;
-	suseconds_t	time_sleep;
-	long		nbr_eat;
-}	t_phidata;
-
-void	data_print(t_phidata *data);
-void	data_init_with_argv(int argc, char **argv, t_phidata *data);
+typedef struct s_philo{
+	t_arg			*arg;
+	unsigned int	num_philo;
+	time_t			last_eat;
+	unsigned long	nbr_eat;
+}	t_philo;
 
 /* exit ----------------------------------------------------------------------*/
 

@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 20:04:01 by svogrig           #+#    #+#             */
-/*   Updated: 2024/05/02 20:36:13 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/06/19 15:05:32 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	exit_on_invalid_argument(char *str)
 
 void	exit_on_overflow(char *str)
 {
-	printf("philo: \'%s\' out of range\n", str);
+	printf("philo: \'%s\' out of range [0 - %u\n", str, UINT_MAX);
 	exit (SUCCESS);
 }
 

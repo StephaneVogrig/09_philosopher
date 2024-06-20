@@ -6,7 +6,7 @@
 #    By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/03 19:41:13 by stephane          #+#    #+#              #
-#    Updated: 2024/05/02 20:19:27 by svogrig          ###   ########.fr        #
+#    Updated: 2024/06/19 16:05:15 by svogrig          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ NAME_SAN	:=	$(NAME)_sanitize
 
 DIR_SRC		:=	src
 SRC			:=	main.c \
-				data.c \
+				arg.c \
 				exit.c
 
 SRC			:=	$(SRC:%=$(DIR_SRC)/%)
@@ -121,7 +121,7 @@ $(DIR_BUILD)/%.o: $(DIR_SRC)/%.c
 
 $(DIR_BUILD)/debug/%.o: $(DIR_SRC)/%.c
 	@mkdir -p $(@D)
-	@$(CC) $(CC_FLAGS) $(I_FLAG) $(DEBUG_FLAGS) -c $< -o $@
+	@$(CC) $(CC_FLAGS) $(I_FLAG) $(DEBUG_FLAGS) -g -c $< -o $@
 	$(info created : $@)
 
 $(DIR_BUILD)/sanitize/%.o: $(DIR_SRC)/%.c
