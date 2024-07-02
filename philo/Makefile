@@ -6,7 +6,7 @@
 #    By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/03 19:41:13 by stephane          #+#    #+#              #
-#    Updated: 2024/06/19 16:05:15 by svogrig          ###   ########.fr        #
+#    Updated: 2024/06/21 17:38:54 by svogrig          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ NAME_SAN	:=	$(NAME)_sanitize
 DIR_SRC		:=	src
 SRC			:=	main.c \
 				arg.c \
+				data.c \
 				exit.c
 
 SRC			:=	$(SRC:%=$(DIR_SRC)/%)

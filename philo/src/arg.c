@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   data.c                                             :+:      :+:    :+:   */
+/*   arg.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 20:01:24 by svogrig           #+#    #+#             */
-/*   Updated: 2024/06/19 15:39:39 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/06/21 18:18:46 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void	arg_init(int argc, char **argv, t_arg *arg)
 		arg->nbr_eat = str_to_ulong(*argv);
 	else
 		arg->nbr_eat = -1;
+	arg_print(arg);
 }
 
 void	arg_print(t_arg *arg)
