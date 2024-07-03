@@ -14,19 +14,21 @@
 
 void data_fill(t_philo *philo, t_mutex *fork,  t_arg *arg)
 {
-	t_ulong i;
+	int i;
 
 	i = 0;
 	while (i < arg->nbr_philo)
 	{
 		pthread_mutex_init(&fork[i], NULL);
 		philo[i].id	= i + 1;
-		philo[i].arg = arg;
 		philo[i].fork_right = &fork[i];
-		if (i == arg->nbr_philo)
+		if (i == arg->nbr_philo - 1)
 			philo[i].fork_left = &fork[0];
 		else
-			philo[i].fork_left = &fork[i];
+			philo[i].fork_left = &fork[i + 1];
+		philo[i].eat_counter = 0;
+		philo[i].eat_last = 0;
+		philo[i].arg = arg;
 		i++;
 	}
 }
