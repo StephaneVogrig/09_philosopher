@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 14:52:45 by svogrig           #+#    #+#             */
-/*   Updated: 2024/07/07 17:07:29 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/07/07 17:32:59 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -18,9 +18,9 @@ void	take_fork(t_philo *philo, t_mutex *fork)
 		return ;
 	if (fork == NULL)
 	{
-		usleep(philo->arg->time_die * 1000);
+		msleep(philo, philo->arg->time_die);
         set_finish(philo);
-		return ; // wait died
+		return ;
 	}
 	pthread_mutex_lock(fork);
 	if (is_finish(philo))
@@ -28,13 +28,6 @@ void	take_fork(t_philo *philo, t_mutex *fork)
     pthread_mutex_lock(&philo->arg->access);
 	printf("%lu %lu has taken a fork\n", timestamp_ms(philo->arg->timeval_start), philo->id);
     pthread_mutex_unlock(&philo->arg->access);
-}
-
-void	release_fork(t_philo *philo)
-{
-	pthread_mutex_unlock(philo->fork_1);
-    if (philo->fork_2)
-	    pthread_mutex_unlock(philo->fork_2);
 }
 
 void	philo_eat(t_philo *philo, t_arg *arg)
@@ -85,7 +78,9 @@ void	*philosopher(void *data)
 		take_fork(philo, philo->fork_1);
 		take_fork(philo, philo->fork_2);
 		philo_eat(philo, philo->arg);
-		release_fork(philo);
+		pthread_mutex_unlock(philo->fork_1);
+		if (philo->fork_2)
+			pthread_mutex_unlock(philo->fork_2);
 		philo_sleep(philo, philo->arg);
 	}
 	return (NULL);

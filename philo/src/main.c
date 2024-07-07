@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 00:43:00 by svogrig           #+#    #+#             */
-/*   Updated: 2024/07/07 16:52:56 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/07/07 17:49:00 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -43,8 +43,6 @@ t_ulong	timestamp_ms(t_timeval start)
 	gettimeofday(&end, NULL);
 	time_ms = (end.tv_sec - start.tv_sec) * 1000;
 	time_ms += (end.tv_usec - start.tv_usec) / 1000;
-	// time_ms = (end.tv_sec - start.tv_sec) * 1000 * 1000;
-	// time_ms += (end.tv_usec - start.tv_usec);
 	return (time_ms);
 }
 
@@ -52,7 +50,6 @@ void	monitor(t_arg *arg, t_philo *philo)
 {
 	int			i;
 	t_msecond	timestamp;
-	t_msecond	last_eat;
 
 	while (1)
 	{
@@ -60,13 +57,11 @@ void	monitor(t_arg *arg, t_philo *philo)
 		while (++i < arg->nbr_philo)
 		{
 			pthread_mutex_lock(&philo->arg->access);
-			last_eat = philo[i].eat_last;
 			timestamp = timestamp_ms(arg->timeval_start);
-			t_msecond diff_time = timestamp - last_eat;
-			if (diff_time >= arg->time_die)
+			if (timestamp - philo[i].eat_last >= arg->time_die)
 			{
 				set_finish(philo);
-				printf("%lu %lu died\n", timestamp, philo[i].id);
+				printf("%lu %lu died\n", timestamp_ms(arg->timeval_start), philo[i].id);
 			}
 			pthread_mutex_unlock(&philo->arg->access);
 			if (is_finish(philo))
