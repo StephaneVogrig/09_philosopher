@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 00:47:24 by svogrig           #+#    #+#             */
-/*   Updated: 2024/07/07 15:05:11 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/07/07 16:51:38 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -79,7 +79,7 @@ void	exit_on_nbr_arg(void);
 
 /* intmtx */
 
-void	set_stop(t_philo *philo);
+void	set_finish(t_philo *philo);
 t_bool	is_finish(t_philo *philo);
 void	set_intmtx(t_intmtx *protected, int value);
 int		get_intmtx(t_intmtx *protected);
@@ -87,5 +87,6 @@ int		get_intmtx(t_intmtx *protected);
 t_ulong	timestamp_ms(t_timeval start);
 
 void	*philosopher(void *data);
+void	msleep(t_philo *philo, t_ulong time);
 
 #endif

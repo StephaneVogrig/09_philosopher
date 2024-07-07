@@ -6,20 +6,34 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 00:43:00 by svogrig           #+#    #+#             */
-/*   Updated: 2024/07/07 15:19:22 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/07/07 16:52:56 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "philo.h"
 
-// void	philo_wait(t_ulong time)
-// {
-// 	struct timeval	start;
-
-// 	gettimeofday(&start, NULL);
-// 	while (timestamp_ms(start) < time);
+void	msleep(t_philo *philo, t_ulong time)
+{
+	t_msecond 	timestamp;
+	t_msecond	end;
 	
-// }
+	if (is_finish(philo))
+		return ;
+    pthread_mutex_lock(&philo->arg->access);
+	timestamp = timestamp_ms(philo->arg->timeval_start);
+	pthread_mutex_unlock(&philo->arg->access);
+	end = timestamp + time;
+	while (timestamp < end)
+	{
+		if (end - timestamp > 10)
+			usleep(6000);
+		if (is_finish(philo))
+			return ;
+		pthread_mutex_lock(&philo->arg->access);
+		timestamp = timestamp_ms(philo->arg->timeval_start);
+		pthread_mutex_unlock(&philo->arg->access);
+	}
+}
 
 t_ulong	timestamp_ms(t_timeval start)
 {
@@ -49,11 +63,10 @@ void	monitor(t_arg *arg, t_philo *philo)
 			last_eat = philo[i].eat_last;
 			timestamp = timestamp_ms(arg->timeval_start);
 			t_msecond diff_time = timestamp - last_eat;
-			// printf("check %lu difftime  %lu  - last eat %lu - time die %lu\n",philo[i].id, diff_time, last_eat, arg->time_die);
 			if (diff_time >= arg->time_die)
 			{
-				set_stop(philo);
-				printf("%lu %lu died - last meal %lu\n", timestamp, philo[i].id, philo[i].eat_last);
+				set_finish(philo);
+				printf("%lu %lu died\n", timestamp, philo[i].id);
 			}
 			pthread_mutex_unlock(&philo->arg->access);
 			if (is_finish(philo))
@@ -105,5 +118,5 @@ int	main(int argc, char **argv)
 		return (EXIT_FAILURE);
 	philo_run(&arg, philo);
 	data_destroy(philo, fork, &arg);
-	return (SUCCESS);
+	return (EXIT_SUCCESS);
 }

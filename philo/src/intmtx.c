@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 16:11:35 by svogrig           #+#    #+#             */
-/*   Updated: 2024/07/07 14:49:09 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/07/07 16:51:39 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -19,7 +19,7 @@ t_bool	is_finish(t_philo *philo)
 	return (FALSE);
 }
 
-void	set_stop(t_philo *philo)
+void	set_finish(t_philo *philo)
 {
 	set_intmtx(&philo->arg->stop, TRUE);
 }
