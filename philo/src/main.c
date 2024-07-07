@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 00:43:00 by svogrig           #+#    #+#             */
-/*   Updated: 2024/07/07 10:49:09 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/07/07 11:18:18 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -34,51 +34,29 @@ t_ulong	timestamp_in_ms(t_timeval start)
 	t_ulong			time_ms;
 
 	gettimeofday(&end, NULL);
+	// time_ms = (end.tv_sec - start.tv_sec) * 1000;
+	// time_ms += (end.tv_usec - start.tv_usec) / 1000;
 	time_ms = (end.tv_sec - start.tv_sec) * 1000 * 1000;
 	time_ms += (end.tv_usec - start.tv_usec);
-	// time_ms += (end.tv_usec - start.tv_usec) / 1000;
 	return (time_ms);
 }
 
-void	take_fork(t_philo *philo, t_arg *arg)
+void	take_fork2(t_philo *philo, t_mutex *fork)
 {
-(void)arg;
 	if (is_finish(philo))
 		return ;
-	if (philo->id % 2)
-	{
-		pthread_mutex_lock(philo->fork_left);
-		if (is_finish(philo))
-			return ;
-		printf("%lu %lu has taken a fork left\n", timestamp_in_ms(philo->arg->timeval_start), philo->id);
-	}
-	else
-	{
-		pthread_mutex_lock(philo->fork_right);
-		if (is_finish(philo))
-			return ;
-		printf("%lu %lu has taken a fork right\n", timestamp_in_ms(philo->arg->timeval_start), philo->id);
-	}
-	if (philo->id % 2)
-	{
-		pthread_mutex_lock(philo->fork_right);
-		if (is_finish(philo))
-			return ;
-		printf("%lu %lu has taken a fork right\n", timestamp_in_ms(philo->arg->timeval_start), philo->id);
-	}
-	else
-	{
-		pthread_mutex_lock(philo->fork_left);
-		if (is_finish(philo))
-			return ;
-		printf("%lu %lu has taken a fork left\n", timestamp_in_ms(philo->arg->timeval_start), philo->id);
-	}
+	if (fork == NULL)
+		return ; // wait died
+	pthread_mutex_lock(fork);
+	if (is_finish(philo))
+		return ;
+	printf("%lu %lu has taken a fork\n", timestamp_in_ms(philo->arg->timeval_start), philo->id);
 }
 
 void	release_fork(t_philo *philo)
 {
-	pthread_mutex_unlock(philo->fork_left);
-	pthread_mutex_unlock(philo->fork_right);
+	pthread_mutex_unlock(philo->fork_1);
+	pthread_mutex_unlock(philo->fork_2);
 }
 
 void	philo_eat(t_philo *philo, t_arg *arg)
@@ -117,7 +95,8 @@ void	*philosopher(void *data)
 	philo = data;
 	while (!get_intmtx(&philo->arg->stop))
 	{
-		take_fork(philo, philo->arg);
+		take_fork2(philo, philo->fork_1);
+		take_fork2(philo, philo->fork_2);
 		philo_eat(philo, philo->arg);
 		release_fork(philo);
 		philo_sleep(philo, philo->arg);

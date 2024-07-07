@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 00:47:24 by svogrig           #+#    #+#             */
-/*   Updated: 2024/07/07 10:27:04 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/07/07 11:28:03 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -60,8 +60,6 @@ void	arg_init(int argc, char **argv, t_arg *arg);
 
 typedef struct s_philo{
 	t_ulong		id;
-	t_mutex		*fork_right;
-	t_mutex		*fork_left;
 	t_mutex		*fork_1;
 	t_mutex		*fork_2;
 	int			eat_counter;
