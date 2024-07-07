@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 20:01:24 by svogrig           #+#    #+#             */
-/*   Updated: 2024/07/07 09:45:17 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/07/07 14:39:16 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -54,9 +54,9 @@ void	arg_init(int argc, char **argv, t_arg *arg)
 
 	argv++;
 	arg->nbr_philo = (int)str_to_ulong(*argv++);
-	arg->time_die = str_to_ulong(*argv++) * 1000;
-	arg->time_eat = str_to_ulong(*argv++) * 1000;
-	arg->time_sleep = str_to_ulong(*argv++) * 1000;
+	arg->time_die = str_to_ulong(*argv++);
+	arg->time_eat = str_to_ulong(*argv++);
+	arg->time_sleep = str_to_ulong(*argv++);
 	if (argc == 6)
 	{
 		nbr_eat = str_to_ulong(*argv);

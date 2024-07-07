@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 00:47:24 by svogrig           #+#    #+#             */
-/*   Updated: 2024/07/07 11:28:03 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/07/07 15:05:11 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -51,6 +51,7 @@ struct s_arg{
 	t_timeval	timeval_start;
 	t_intmtx	stop;
 	t_intmtx	nbr_philo_eat_finish;
+	t_mutex		access;
 };
 
 void	arg_print(t_arg *data);
@@ -68,6 +69,7 @@ typedef struct s_philo{
 }	t_philo;
 
 t_bool	data_init(t_philo **philo, t_mutex **fork, t_arg *arg);
+void	data_destroy(t_philo *philo, t_mutex *fork, t_arg *arg);
 
 /* exit ----------------------------------------------------------------------*/
 
@@ -77,7 +79,13 @@ void	exit_on_nbr_arg(void);
 
 /* intmtx */
 
+void	set_stop(t_philo *philo);
+t_bool	is_finish(t_philo *philo);
 void	set_intmtx(t_intmtx *protected, int value);
 int		get_intmtx(t_intmtx *protected);
+
+t_ulong	timestamp_ms(t_timeval start);
+
+void	*philosopher(void *data);
 
 #endif

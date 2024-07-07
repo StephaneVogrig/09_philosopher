@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 17:36:37 by svogrig           #+#    #+#             */
-/*   Updated: 2024/07/07 10:55:38 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/07/07 12:25:20 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -30,11 +30,6 @@ void data_fill(t_philo *philo, t_mutex *fork,  t_arg *arg)
 	{
 		pthread_mutex_init(&fork[i], NULL);
 		philo[i].id	= i + 1;
-		// philo[i].fork_right = &fork[i];
-		// if (i == arg->nbr_philo - 1)
-		// 	philo[i].fork_left = &fork[0];
-		// else
-		// 	philo[i].fork_left = &fork[i + 1];
 		philo[i].eat_counter = 0;
 		philo[i].eat_last = 0;
 		philo[i].arg = arg;
@@ -67,4 +62,17 @@ t_bool	data_init(t_philo **philo, t_mutex **fork, t_arg *arg)
 	}
 	data_fill(*philo, *fork, arg);
 	return (SUCCESS);
+}
+
+void	data_destroy(t_philo *philo, t_mutex *fork, t_arg *arg)
+{
+	int	i;
+
+	i = -1;
+	while (++i < arg->nbr_philo)
+		pthread_mutex_destroy(&fork[i]);
+	free(fork);
+	free(philo);
+	pthread_mutex_destroy(&(arg->stop.mutex));
+	pthread_mutex_destroy(&(arg->nbr_philo_eat_finish.mutex));
 }
