@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   arg.c                                              :+:      :+:    :+:   */
@@ -6,18 +6,18 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 20:01:24 by svogrig           #+#    #+#             */
-/*   Updated: 2024/07/03 16:17:10 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/07/07 09:45:17 by svogrig          ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "philo.h"
 
-static inline int	isblank(char c)
+static inline int	is_blank(char c)
 {
 	return ((9 <= c && c <= 13) || c == ' ');
 }
 
-static inline int	isdigit(char c)
+static inline int	is_digit(char c)
 {
 	return (c >= '0' && c <= '9');
 }
@@ -26,23 +26,21 @@ static unsigned long	str_to_ulong(char *str)
 {
 	char			*temp;
 	unsigned long	value;
-	unsigned long	previous;
 
 	if (!*str)
 		exit_on_invalid_argument("");
 	temp = str;
-	while (isblank(*temp))
+	while (is_blank(*temp))
 		temp++;
 	value = 0;
-	while (isdigit(*temp))
+	while (is_digit(*temp))
 	{
-		previous = value;
 		value = value * 10 + *temp - '0';
 		if (value > INT_MAX)
 			exit_on_overflow(str);
 		temp++;
 	}
-	while (isblank(*temp))
+	while (is_blank(*temp))
 		temp++;
 	if (*temp)
 		exit_on_invalid_argument(str);
@@ -77,7 +75,7 @@ void	arg_init(int argc, char **argv, t_arg *arg)
 	pthread_mutex_init(&(arg->stop.mutex), NULL);
 	arg->nbr_philo_eat_finish.value = 0;
 	pthread_mutex_init(&(arg->nbr_philo_eat_finish.mutex), NULL);
-	arg_print(arg);
+	// arg_print(arg);
 }
 
 void	arg_print(t_arg *arg)

@@ -1,2 +1,4 @@
 philo/.build
 *.vscode
+philo/philo
+philo/philo_debug

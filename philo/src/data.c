@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   data.c                                             :+:      :+:    :+:   */
@@ -6,11 +6,20 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 17:36:37 by svogrig           #+#    #+#             */
-/*   Updated: 2024/06/21 18:19:31 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/07/07 10:48:32 by svogrig          ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "philo.h"
+
+
+int	i_next(int i, t_arg *arg)
+{
+	i++;
+	if (i == arg->nbr_philo)
+		return (0);
+	return (i);
+}
 
 void data_fill(t_philo *philo, t_mutex *fork,  t_arg *arg)
 {
@@ -29,6 +38,19 @@ void data_fill(t_philo *philo, t_mutex *fork,  t_arg *arg)
 		philo[i].eat_counter = 0;
 		philo[i].eat_last = 0;
 		philo[i].arg = arg;
+		// philo[i].fork_1 = &fork[i];
+		// if (arg->nbr_philo == 1)
+		// 	philo[i].fork_2 = NULL;
+		// else if (i % 2)
+		// {
+		// 	philo[i].fork_1 = &fork[i];
+		// 	philo[i].fork_2 = &fork[i_next(i, arg)];
+		// }
+		// else
+		// {
+		// 	philo[i].fork_1 = &fork[i_next(i, arg)];
+		// 	philo[i].fork_2 = &fork[i];
+		// }
 		i++;
 	}
 }

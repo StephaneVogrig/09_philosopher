@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
@@ -6,11 +6,27 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 00:43:00 by svogrig           #+#    #+#             */
-/*   Updated: 2024/07/03 16:45:20 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/07/07 10:49:09 by svogrig          ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "philo.h"
+
+// void	philo_wait(t_ulong time)
+// {
+// 	struct timeval	start;
+
+// 	gettimeofday(&start, NULL);
+// 	while (timestamp_in_ms(start) < time);
+	
+// }
+
+t_bool	is_finish(t_philo *philo)
+{
+	if (get_intmtx(&philo->arg->stop))
+		return (TRUE);
+	return (FALSE);
+}
 
 t_ulong	timestamp_in_ms(t_timeval start)
 {
@@ -18,31 +34,43 @@ t_ulong	timestamp_in_ms(t_timeval start)
 	t_ulong			time_ms;
 
 	gettimeofday(&end, NULL);
-	time_ms = (end.tv_sec - start.tv_sec) * 1000;
-	time_ms += (end.tv_usec - start.tv_usec) / 1000;
+	time_ms = (end.tv_sec - start.tv_sec) * 1000 * 1000;
+	time_ms += (end.tv_usec - start.tv_usec);
+	// time_ms += (end.tv_usec - start.tv_usec) / 1000;
 	return (time_ms);
 }
 
-void	take_fork(t_philo *philo)
+void	take_fork(t_philo *philo, t_arg *arg)
 {
+(void)arg;
+	if (is_finish(philo))
+		return ;
 	if (philo->id % 2)
 	{
 		pthread_mutex_lock(philo->fork_left);
+		if (is_finish(philo))
+			return ;
 		printf("%lu %lu has taken a fork left\n", timestamp_in_ms(philo->arg->timeval_start), philo->id);
 	}
 	else
 	{
 		pthread_mutex_lock(philo->fork_right);
+		if (is_finish(philo))
+			return ;
 		printf("%lu %lu has taken a fork right\n", timestamp_in_ms(philo->arg->timeval_start), philo->id);
 	}
 	if (philo->id % 2)
 	{
 		pthread_mutex_lock(philo->fork_right);
+		if (is_finish(philo))
+			return ;
 		printf("%lu %lu has taken a fork right\n", timestamp_in_ms(philo->arg->timeval_start), philo->id);
 	}
 	else
 	{
 		pthread_mutex_lock(philo->fork_left);
+		if (is_finish(philo))
+			return ;
 		printf("%lu %lu has taken a fork left\n", timestamp_in_ms(philo->arg->timeval_start), philo->id);
 	}
 }
@@ -55,11 +83,10 @@ void	release_fork(t_philo *philo)
 
 void	philo_eat(t_philo *philo, t_arg *arg)
 {
-	if (get_intmtx(&arg->stop))
+	if (is_finish(philo))
 		return ;
 	philo->eat_last = timestamp_in_ms(arg->timeval_start);
 	printf("%lu %lu is eating\n", timestamp_in_ms(arg->timeval_start), philo->id);
-	usleep(arg->time_eat);
 	philo->eat_counter++;
 	if (philo->eat_counter == arg->nbr_eat)
 	{
@@ -69,12 +96,18 @@ void	philo_eat(t_philo *philo, t_arg *arg)
 			set_intmtx(&arg->stop, TRUE);
 		pthread_mutex_unlock(&arg->nbr_philo_eat_finish.mutex);
 	}
+	if (is_finish(philo))
+		return ;
+	usleep(arg->time_eat);
 }
 
-void	philo_sleep(t_philo *philo)
-{
-		printf("%lu %lu is sleeping\n", timestamp_in_ms(philo->arg->timeval_start), philo->id);
-		usleep(philo->arg->time_sleep);
+void	philo_sleep(t_philo *philo, t_arg *arg)
+{	
+(void)arg;
+	if (is_finish(philo))
+		return ;
+	printf("%lu %lu is sleeping\n", timestamp_in_ms(philo->arg->timeval_start), philo->id);
+	usleep(philo->arg->time_sleep);
 }
 
 void	*philosopher(void *data)
@@ -84,11 +117,11 @@ void	*philosopher(void *data)
 	philo = data;
 	while (!get_intmtx(&philo->arg->stop))
 	{
-		take_fork(philo);
+		take_fork(philo, philo->arg);
 		philo_eat(philo, philo->arg);
 		release_fork(philo);
-		philo_sleep(philo);
-			set_intmtx(&philo->arg->stop, TRUE);
+		philo_sleep(philo, philo->arg);
+		//set_intmtx(&philo->arg->stop, TRUE);
 	}
 	return (NULL);
 }
@@ -108,9 +141,9 @@ void	monitor(t_arg *arg, t_philo *philo)
 			{
 				set_intmtx(&arg->stop, TRUE);
 				printf("%lu %lu died\n", timestamp, philo->id);
+				return ;
 			}
 			timestamp = timestamp_in_ms(arg->timeval_start);
-
 		}
 	}
 }
