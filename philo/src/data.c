@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 17:36:37 by svogrig           #+#    #+#             */
-/*   Updated: 2024/07/07 12:25:20 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/07/07 18:15:08 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -73,6 +73,4 @@ void	data_destroy(t_philo *philo, t_mutex *fork, t_arg *arg)
 		pthread_mutex_destroy(&fork[i]);
 	free(fork);
 	free(philo);
-	pthread_mutex_destroy(&(arg->stop.mutex));
-	pthread_mutex_destroy(&(arg->nbr_philo_eat_finish.mutex));
 }

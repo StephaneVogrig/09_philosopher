@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 16:11:35 by svogrig           #+#    #+#             */
-/*   Updated: 2024/07/07 16:51:39 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/07/07 18:13:23 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -14,14 +14,19 @@
 
 t_bool	is_finish(t_philo *philo)
 {
-	if (get_intmtx(&philo->arg->stop))
-		return (TRUE);
-	return (FALSE);
+	t_bool	finish;
+	
+	pthread_mutex_lock(&philo->arg->access);
+	finish = philo->arg->stop;
+	pthread_mutex_unlock(&philo->arg->access);
+	return (finish);
 }
 
 void	set_finish(t_philo *philo)
 {
-	set_intmtx(&philo->arg->stop, TRUE);
+	pthread_mutex_lock(&philo->arg->access);
+	philo->arg->stop = TRUE;
+	pthread_mutex_unlock(&philo->arg->access);
 }
 
 void	set_intmtx(t_intmtx *protected, int value)

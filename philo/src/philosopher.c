@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 14:52:45 by svogrig           #+#    #+#             */
-/*   Updated: 2024/07/07 17:32:59 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/07/07 18:11:29 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -40,9 +40,9 @@ void	philo_eat(t_philo *philo, t_arg *arg)
 	philo->eat_counter++;
 	if (philo->eat_counter == arg->nbr_eat)
 	{
-		arg->nbr_philo_eat_finish.value++;
-		if (arg->nbr_philo_eat_finish.value == arg->nbr_philo)
-			set_finish(philo);
+		arg->nbr_philo_eat_finish++;
+		// if (arg->nbr_philo_eat_finish == arg->nbr_philo)
+			// arg->stop = TRUE;
 	}   
     pthread_mutex_unlock(&arg->access);
 	msleep(philo, arg->time_eat);

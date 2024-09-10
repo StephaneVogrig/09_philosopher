@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 00:47:24 by svogrig           #+#    #+#             */
-/*   Updated: 2024/07/07 16:51:38 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/07/07 18:00:42 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -49,9 +49,9 @@ struct s_arg{
 	t_msecond	time_sleep;
 	int			nbr_eat;
 	t_timeval	timeval_start;
-	t_intmtx	stop;
-	t_intmtx	nbr_philo_eat_finish;
 	t_mutex		access;
+	t_bool		stop;
+	int			nbr_philo_eat_finish;
 };
 
 void	arg_print(t_arg *data);

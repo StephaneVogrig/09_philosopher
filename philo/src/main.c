@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 00:43:00 by svogrig           #+#    #+#             */
-/*   Updated: 2024/07/07 17:49:00 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/07/07 18:11:09 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -56,14 +56,16 @@ void	monitor(t_arg *arg, t_philo *philo)
 		i = -1;
 		while (++i < arg->nbr_philo)
 		{
-			pthread_mutex_lock(&philo->arg->access);
+			pthread_mutex_lock(&arg->access);
 			timestamp = timestamp_ms(arg->timeval_start);
 			if (timestamp - philo[i].eat_last >= arg->time_die)
 			{
-				set_finish(philo);
+				arg->stop = TRUE;
 				printf("%lu %lu died\n", timestamp_ms(arg->timeval_start), philo[i].id);
 			}
-			pthread_mutex_unlock(&philo->arg->access);
+			if (arg->nbr_philo_eat_finish == arg->nbr_philo)
+				arg->stop = TRUE;
+			pthread_mutex_unlock(&arg->access);
 			if (is_finish(philo))
 				return ;
 		}

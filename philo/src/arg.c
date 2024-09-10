@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 20:01:24 by svogrig           #+#    #+#             */
-/*   Updated: 2024/07/07 17:21:40 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/07/07 17:59:42 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -72,10 +72,8 @@ void	arg_init(int argc, char **argv, t_arg *arg)
 	pthread_mutex_init(&(arg->access), NULL);
 	gettimeofday(&timeval_start, NULL);
 	arg->timeval_start = timeval_start;
-	arg->stop.value = FALSE;
-	pthread_mutex_init(&(arg->stop.mutex), NULL);
-	arg->nbr_philo_eat_finish.value = 0;
-	pthread_mutex_init(&(arg->nbr_philo_eat_finish.mutex), NULL);
+	arg->stop = FALSE;
+	arg->nbr_philo_eat_finish = 0;
 }
 
 void	arg_print(t_arg *arg)
