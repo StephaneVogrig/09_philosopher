@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   arg.c                                              :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 20:01:24 by svogrig           #+#    #+#             */
-/*   Updated: 2024/07/07 17:59:42 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/09/24 22:48:08 by svogrig          ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "philo.h"
 
@@ -74,16 +74,5 @@ void	arg_init(int argc, char **argv, t_arg *arg)
 	arg->timeval_start = timeval_start;
 	arg->stop = FALSE;
 	arg->nbr_philo_eat_finish = 0;
-}
-
-void	arg_print(t_arg *arg)
-{
-	// printf("ULONG_MAX: %lu\n", ULONG_MAX);
-	// printf("UINT_MAX: %u\n", UINT_MAX);
-	printf("nbr philo    : %d\n", arg->nbr_philo);
-	printf("time to die  : %lu\n", arg->time_die);
-	printf("time to eat  : %lu\n", arg->time_eat);
-	printf("time to sleep: %lu\n", arg->time_sleep);
-	printf("nbr of eat   : %d\n", arg->nbr_eat);
 }
 	
