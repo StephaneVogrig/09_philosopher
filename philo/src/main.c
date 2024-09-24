@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 00:43:00 by svogrig           #+#    #+#             */
-/*   Updated: 2024/07/07 18:11:09 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/09/25 01:20:42 by svogrig          ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "philo.h"
 
@@ -51,24 +51,23 @@ void	monitor(t_arg *arg, t_philo *philo)
 	int			i;
 	t_msecond	timestamp;
 
+	i = 0;
 	while (1)
 	{
-		i = -1;
-		while (++i < arg->nbr_philo)
+		pthread_mutex_lock(&arg->access);
+		timestamp = timestamp_ms(arg->timeval_start);
+		if (timestamp - philo[i].eat_last >= arg->time_die)
 		{
-			pthread_mutex_lock(&arg->access);
-			timestamp = timestamp_ms(arg->timeval_start);
-			if (timestamp - philo[i].eat_last >= arg->time_die)
-			{
-				arg->stop = TRUE;
-				printf("%lu %lu died\n", timestamp_ms(arg->timeval_start), philo[i].id);
-			}
-			if (arg->nbr_philo_eat_finish == arg->nbr_philo)
-				arg->stop = TRUE;
-			pthread_mutex_unlock(&arg->access);
-			if (is_finish(philo))
-				return ;
+			arg->stop = TRUE;
+			printf("%lu %lu died\n", timestamp_ms(arg->timeval_start), philo[i].id);
 		}
+		if (arg->nbr_philo_eat_finish == arg->nbr_philo)
+			arg->stop = TRUE;
+		pthread_mutex_unlock(&arg->access);
+		if (is_finish(philo))
+			break ;
+		if (++i >= arg->nbr_philo)
+			i = 0;
 	}
 }
 
