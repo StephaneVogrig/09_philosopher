@@ -12,6 +12,18 @@
 
 #include "philo.h"
 
+void	print_log(t_philo *philo, char *msg)
+{
+	t_msecond	time;
+
+	if (is_finish(philo))
+		return ;
+	pthread_mutex_lock(&philo->arg->access);
+	time = timestamp_ms(philo->arg->timeval_start);
+	printf("%lu %lu %s\n", time, philo->id, msg);
+	pthread_mutex_unlock(&philo->arg->access);
+}
+
 void	take_fork(t_philo *philo, t_mutex *fork)
 {
 	if (is_finish(philo))
@@ -23,48 +35,23 @@ void	take_fork(t_philo *philo, t_mutex *fork)
 		return ;
 	}
 	pthread_mutex_lock(fork);
-	if (is_finish(philo))
-		return ;
-    pthread_mutex_lock(&philo->arg->access);
-	printf("%lu %lu has taken a fork\n", timestamp_ms(philo->arg->timeval_start), philo->id);
-    pthread_mutex_unlock(&philo->arg->access);
+	print_log(philo, "has taken a fork");
 }
 
 void	philo_eat(t_philo *philo, t_arg *arg)
 {
+
+	print_log(philo, "is eating");
 	if (is_finish(philo))
 		return ;
     pthread_mutex_lock(&arg->access);
-	philo->eat_last = timestamp_ms(arg->timeval_start);
-	printf("%lu %lu is eating\n", philo->eat_last, philo->id);
 	philo->eat_counter++;
 	if (philo->eat_counter == arg->nbr_eat)
 	{
 		arg->nbr_philo_eat_finish++;
-		// if (arg->nbr_philo_eat_finish == arg->nbr_philo)
-			// arg->stop = TRUE;
 	}   
     pthread_mutex_unlock(&arg->access);
 	msleep(philo, arg->time_eat);
-}
-
-void	philo_sleep(t_philo *philo, t_arg *arg)
-{	
-	if (is_finish(philo))
-		return ;
-    pthread_mutex_lock(&arg->access);
-	printf("%lu %lu is sleeping\n", timestamp_ms(philo->arg->timeval_start), philo->id);
-    pthread_mutex_unlock(&arg->access);
-	msleep(philo, arg->time_sleep);
-}
-
-void	philo_think(t_philo *philo)
-{
-	if (is_finish(philo))
-		return ;
-    pthread_mutex_lock(&philo->arg->access);
-	printf("%lu %lu is thinking\n", timestamp_ms(philo->arg->timeval_start), philo->id);
-    pthread_mutex_unlock(&philo->arg->access);
 }
 
 void	*philosopher(void *data)
@@ -74,14 +61,15 @@ void	*philosopher(void *data)
 	philo = data;
 	while (!is_finish(philo))
 	{
-		philo_think(philo);
+		print_log(philo, "is thinking");
 		take_fork(philo, philo->fork_1);
 		take_fork(philo, philo->fork_2);
 		philo_eat(philo, philo->arg);
 		pthread_mutex_unlock(philo->fork_1);
 		if (philo->fork_2)
 			pthread_mutex_unlock(philo->fork_2);
-		philo_sleep(philo, philo->arg);
+		print_log(philo, "is sleeping");
+		msleep(philo, philo->arg->time_sleep);
 	}
 	return (NULL);
 }
