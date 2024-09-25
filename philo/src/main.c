@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 00:43:00 by svogrig           #+#    #+#             */
-/*   Updated: 2024/09/25 01:20:42 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/09/25 13:43:25 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,23 @@
 
 void	msleep(t_philo *philo, t_ulong time)
 {
-	t_msecond 	timestamp;
+	t_msecond 	start;
 	t_msecond	end;
 	
 	if (is_finish(philo))
 		return ;
     pthread_mutex_lock(&philo->arg->access);
-	timestamp = timestamp_ms(philo->arg->timeval_start);
+	start = timestamp_ms(philo->arg->timeval_start);
 	pthread_mutex_unlock(&philo->arg->access);
-	end = timestamp + time;
-	while (timestamp < end)
+	end = start + time;
+	while (start < end)
 	{
-		if (end - timestamp > 10)
+		if (end - start > 10)
 			usleep(6000);
 		if (is_finish(philo))
 			return ;
 		pthread_mutex_lock(&philo->arg->access);
-		timestamp = timestamp_ms(philo->arg->timeval_start);
+		start = timestamp_ms(philo->arg->timeval_start);
 		pthread_mutex_unlock(&philo->arg->access);
 	}
 }
