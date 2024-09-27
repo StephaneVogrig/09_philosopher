@@ -6,7 +6,7 @@
 #    By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/03 19:41:13 by stephane          #+#    #+#              #
-#    Updated: 2024/09/27 19:34:17 by svogrig          ###   ########.fr        #
+#    Updated: 2024/09/27 19:53:07 by svogrig          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,9 +19,8 @@ NAME_SAN	:=	$(NAME)_sanitize
 DIR_SRC		:=	src
 SRC			:=	main.c \
 				arg.c \
-				data.c \
 				philo_utils.c \
-				philosopher.c \
+				philo_loop.c \
 				exit.c
 
 SRC			:=	$(SRC:%=$(DIR_SRC)/%)

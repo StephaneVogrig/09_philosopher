@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 20:01:24 by svogrig           #+#    #+#             */
-/*   Updated: 2024/09/26 23:08:08 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/09/27 20:14:25 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,3 @@ void	arg_init(int argc, char **argv, t_arg *arg)
 	else
 		arg->eat_max = 0;
 }
-	

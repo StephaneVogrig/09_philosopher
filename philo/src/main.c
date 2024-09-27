@@ -6,28 +6,11 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 00:43:00 by svogrig           #+#    #+#             */
-/*   Updated: 2024/09/27 19:30:35 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/09/27 20:10:48 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-void	philo_check_die(t_philo *philo)
-{
-	t_time_ms	current;
-	
-	current = timestamp_ms(philo->timeval_start);
-	if (current - philo->eat_last >= philo->time_die)
-	{
-		pthread_mutex_lock(&philo->stop->mutex);
-		if (philo->stop->state == FALSE)
-		{
-			philo->stop->state = TRUE;
-			printf("%lu %i died\n", current, philo->id);
-		}
-		pthread_mutex_unlock(&philo->stop->mutex);
-	}
-}
 
 void	philo_run(t_philo *philo, int n)
 {
@@ -63,7 +46,7 @@ void	fork_init(t_philo *philo, int i, int n)
 	if (n == 1)
 	{
 		philo[0].fork_1 = &philo[0].fork;
-		philo[0].fork_2 =NULL;
+		philo[0].fork_2 = NULL;
 	}
 	else if (i == 0)
 	{
@@ -82,7 +65,8 @@ void	fork_init(t_philo *philo, int i, int n)
 	}
 }
 
-void	philo_init(t_philo *philo, t_arg *arg, t_protected *stop, t_protected *nb_philo_eat_max)
+void	philo_init(t_philo *philo, t_arg *arg, t_protected *stop, \
+					t_protected *nb_philo_eat_max)
 {
 	int	i;
 
@@ -93,7 +77,7 @@ void	philo_init(t_philo *philo, t_arg *arg, t_protected *stop, t_protected *nb_p
 	i = 0;
 	while (i < arg->nb_philo)
 	{
-		philo[i].id	= i + 1;
+		philo[i].id = i + 1;
 		philo[i].time_die = arg->time_die;
 		philo[i].time_eat = arg->time_eat;
 		philo[i].time_sleep = arg->time_sleep;
@@ -141,5 +125,6 @@ int	main(int argc, char **argv)
 	philo_run(philo, arg.nb_philo);
 	philo_clean(philo, arg.nb_philo);
 	pthread_mutex_destroy(&stop.mutex);
+	pthread_mutex_destroy(&nb_philo_eat_max.mutex);
 	return (EXIT_SUCCESS);
 }
