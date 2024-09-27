@@ -12,17 +12,18 @@
 
 #include "philo.h"
 
-void	print_log(t_philo *philo, char *msg)
+t_time_ms	print_log(t_philo *philo, char *msg)
 {
 	t_time_ms	time;
 
+	time = timestamp_ms(philo->timeval_start);
 	pthread_mutex_lock(&philo->stop->mutex);
 	if (philo->stop->state == FALSE)
 	{
-		time = timestamp_ms(philo->timeval_start);
 		printf("%li %i %s\n", time, philo->id, msg);
 	}
 	pthread_mutex_unlock(&philo->stop->mutex);
+	return  (time);
 }
 
 int	protected_get_state(t_protected *protected)
@@ -35,70 +36,55 @@ int	protected_get_state(t_protected *protected)
 	return (state);
 }
 
+int	check_death(t_philo	*philo)
+{
+	t_time_ms	time;
+	t_time_ms	delta;
+
+	if (protected_get_state(philo->stop) == TRUE)
+		return (TRUE);
+	time = timestamp_ms(philo->timeval_start);
+	delta = time - philo->eat_last;
+	if (delta >= philo->time_die)
+	{
+		pthread_mutex_lock(&philo->stop->mutex);
+		if (philo->stop->state == FALSE)
+		{
+			philo->stop->state = TRUE;
+			printf("%li %i died\n", time, philo->id);
+		}
+		pthread_mutex_unlock(&philo->stop->mutex);
+		return (TRUE);
+	}
+	return (FALSE);
+}
+
 void	take_fork(t_philo *philo, t_protected *fork)
 {
-	int	waiting_fork;
-
 	if (fork == NULL)
 		return;
-		// msleep(philo, philo->time_die);
-	waiting_fork = TRUE;
-	while (waiting_fork)
+	while (TRUE)
 	{
-		// if (protected_get_state(philo->stop))
-		// 	return ;
+		if (check_death(philo) == TRUE)
+		{
+			if (fork == philo->fork_1)
+				philo->fork_1 = NULL;
+			else
+				philo->fork_2 = NULL;
+			break;
+		}
 		pthread_mutex_lock(&fork->mutex);
 		if (fork->state == FREE)
 		{
 			fork->state = IN_USE;
-			waiting_fork = FALSE;
 			print_log(philo, "has taken a fork");
+			pthread_mutex_unlock(&fork->mutex);
+			break;
 		}
 		pthread_mutex_unlock(&fork->mutex);
-		// philo_check_die(philo);
-		if (waiting_fork)
-		{
-			usleep(10);
-			// print_log(philo, "in loop");
-		}
+		usleep(10);
 	}
 }
-
-// void	philo_eat(t_philo *philo, t_arg *arg)
-// {
-// 	t_msecond	time;
-
-// 	time = print_log(philo, "is eating");
-//     pthread_mutex_lock(&arg->access);
-// 	philo->eat_last = time;
-// 	philo->eat_counter++;
-// 	if (philo->eat_counter == arg->nbr_eat)
-// 	{
-// 		arg->nbr_philo_eat_finish++;
-// 	}   
-//     pthread_mutex_unlock(&arg->access);
-// 	msleep(philo, philo->time_eat);
-// }
-
-// void	*philosopher(void *data)
-// {
-// 	t_philo	*philo;
-
-// 	philo = data;
-// 	while (!is_finish(philo))
-// 	{
-// 		print_log(philo, "is thinking");
-// 		take_fork(philo, philo->fork_1);
-// 		take_fork(philo, philo->fork_2);
-// 		philo_eat(philo, philo->arg);
-// 		pthread_mutex_unlock(philo->fork_1);
-// 		if (philo->fork_2)
-// 			pthread_mutex_unlock(philo->fork_2);
-// 		print_log(philo, "is sleeping");
-// 		msleep(philo, philo->time_sleep);
-// 	}
-// 	return (NULL);
-// }
 
 void	fork_release(t_philo *philo, t_protected *fork)
 {
@@ -108,12 +94,14 @@ void	fork_release(t_philo *philo, t_protected *fork)
 		fork->state = FREE;
 	pthread_mutex_unlock(&fork->mutex);
 	(void)philo;
-	// print_log(philo, "fork release");
-
 }
 
 void	eat_count_manage(t_philo *philo)
 {
+	t_time_ms	time;
+	
+	time = print_log(philo, "is eating");
+	philo->eat_last = time;
 	philo->eat_count++;
 	if (philo->eat_count == philo->eat_max)
 	{
@@ -136,14 +124,11 @@ void	*philo_loop(void *param)
 	philo = param;
 	while (TRUE)
 	{
+		usleep(400);
 		print_log(philo, "is thinking");
-		usleep(10);
 		take_fork(philo, philo->fork_1);
 		take_fork(philo, philo->fork_2);
-		print_log(philo, "is eating");
-
 		eat_count_manage(philo);
-
 		msleep(philo, philo->time_eat);
 		fork_release(philo, philo->fork_1);
 		fork_release(philo, philo->fork_2);

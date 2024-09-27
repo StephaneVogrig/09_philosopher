@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 00:43:00 by svogrig           #+#    #+#             */
-/*   Updated: 2024/09/27 03:52:52 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/09/27 19:30:35 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,62 +27,7 @@ void	philo_check_die(t_philo *philo)
 		}
 		pthread_mutex_unlock(&philo->stop->mutex);
 	}
-	
 }
-
-void	msleep(t_philo *philo, t_time_ms time)
-{
-	t_time_ms 	current;
-	t_time_ms	end;
-	// t_time_ms	time_since_last_eat;
-	
-	current = timestamp_ms(philo->timeval_start);
-	end = current + time;
-	// time_since_last_eat = current - philo->eat_last;
-	while (current < end)
-	{
-		usleep(500);
-		current = timestamp_ms(philo->timeval_start);
-	}
-	// (void)philo;
-	// usleep(time * 1000);
-}
-
-t_time_ms	timestamp_ms(t_timeval start)
-{
-	t_timeval	end;
-	t_time_ms		time_ms;
-
-	gettimeofday(&end, NULL);
-	time_ms = (end.tv_sec - start.tv_sec) * 1000;
-	time_ms += (end.tv_usec - start.tv_usec) / 1000;
-	return (time_ms);
-}
-
-// void	monitor(t_arg *arg, t_philo *philo)
-// {
-// 	int			i;
-// 	t_msecond	timestamp;
-
-// 	i = 0;
-// 	while (1)
-// 	{
-// 		pthread_mutex_lock(&arg->access);
-// 		timestamp = timestamp_ms(arg->timeval_start);
-// 		if (timestamp - philo[i].eat_last >= arg->time_die)
-// 		{
-// 			arg->stop = TRUE;
-// 			printf("%lu %lu died\n", timestamp_ms(arg->timeval_start), philo[i].id);
-// 		}
-// 		if (arg->nbr_philo_eat_finish == arg->nbr_philo)
-// 			arg->stop = TRUE;
-// 		pthread_mutex_unlock(&arg->access);
-// 		if (is_finish(philo))
-// 			break ;
-// 		if (++i >= arg->nbr_philo)
-// 			i = 0;
-// 	}
-// }
 
 void	philo_run(t_philo *philo, int n)
 {
@@ -137,18 +82,6 @@ void	fork_init(t_philo *philo, int i, int n)
 	}
 }
 
-// int	protected_init(t_protected *protected, int state)
-// {
-// 	if (pthread_mutex_init(&protected->mutex, NULL) != 0)
-// 		protected->state = state;
-// 	else
-// 	{
-// 		protected->state = NOT_INIT;
-// 		return (FAILURE);
-// 	}
-// 	return (SUCCESS);
-// }
-
 void	philo_init(t_philo *philo, t_arg *arg, t_protected *stop, t_protected *nb_philo_eat_max)
 {
 	int	i;
@@ -161,6 +94,7 @@ void	philo_init(t_philo *philo, t_arg *arg, t_protected *stop, t_protected *nb_p
 	while (i < arg->nb_philo)
 	{
 		philo[i].id	= i + 1;
+		philo[i].time_die = arg->time_die;
 		philo[i].time_eat = arg->time_eat;
 		philo[i].time_sleep = arg->time_sleep;
 		gettimeofday(&philo[i].timeval_start, NULL);
@@ -194,14 +128,12 @@ int	main(int argc, char **argv)
 	t_philo		*philo;
 	t_protected	stop;
 	t_protected	nb_philo_eat_max;
-	// t_management	manager;
 
 	if (argc > 6 || argc < 5)
 		exit_on_nbr_arg();
 	arg_init(argc, argv, &arg);
 	if (arg.nb_philo == 0)
 		return (EXIT_SUCCESS);
-	// printf("run philo: %i die: %li eat: %li sleep: %li neat: %i\n", arg.nb_philo, arg.time_die, arg.time_eat, arg.time_sleep, arg.nb_eat);
 	philo = malloc(arg.nb_philo * sizeof(*philo));
 	if (philo == NULL)
 		exit_on_malloc_failure();

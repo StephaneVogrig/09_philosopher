@@ -6,7 +6,7 @@
 #    By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/03 19:41:13 by stephane          #+#    #+#              #
-#    Updated: 2024/09/25 14:54:24 by svogrig          ###   ########.fr        #
+#    Updated: 2024/09/27 19:34:17 by svogrig          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ DIR_SRC		:=	src
 SRC			:=	main.c \
 				arg.c \
 				data.c \
-				intmtx.c \
+				philo_utils.c \
 				philosopher.c \
 				exit.c
 
