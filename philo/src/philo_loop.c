@@ -12,29 +12,7 @@
 
 #include "philo.h"
 
-void	take_fork(t_philo *philo, t_protected *fork)
-{
-	while (TRUE)
-	{
-		if (check_death(philo) == TRUE)
-			return ;
-		if (fork)
-		{
-			pthread_mutex_lock(&fork->mutex);
-			if (fork->state == FREE)
-			{
-				fork->state = IN_USE;
-				pthread_mutex_unlock(&fork->mutex);
-				break ;
-			}
-			pthread_mutex_unlock(&fork->mutex);
-		}
-		usleep(10);
-	}
-	print_log(philo, "has taken a fork");
-}
-
-void	fork_release(t_protected *fork)
+void	release_fork(t_protected *fork)
 {
 	if (!fork)
 		return ;
@@ -66,6 +44,28 @@ void	eat(t_philo *philo)
 	msleep(philo, philo->time_eat);
 }
 
+void	take_fork(t_philo *philo, t_protected *fork)
+{
+	while (TRUE)
+	{
+		if (check_death(philo) == TRUE)
+			return ;
+		if (fork)
+		{
+			pthread_mutex_lock(&fork->mutex);
+			if (fork->state == FREE)
+			{
+				fork->state = IN_USE;
+				pthread_mutex_unlock(&fork->mutex);
+				break ;
+			}
+			pthread_mutex_unlock(&fork->mutex);
+		}
+		usleep(10);
+	}
+	print_log(philo, "has taken a fork");
+}
+
 void	take_forks(t_philo *philo)
 {
 	if (philo->id % 2 == 0)
@@ -91,8 +91,8 @@ void	*philo_loop(void *param)
 	{
 		take_forks(philo);
 		eat(philo);
-		fork_release(philo->fork_left);
-		fork_release(philo->fork_right);
+		release_fork(philo->fork_left);
+		release_fork(philo->fork_right);
 		print_log(philo, "is sleeping");
 		msleep(philo, philo->time_sleep);
 		print_log(philo, "is thinking");
