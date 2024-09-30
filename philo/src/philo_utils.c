@@ -6,11 +6,23 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 16:11:35 by svogrig           #+#    #+#             */
-/*   Updated: 2024/09/27 20:11:35 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/09/30 20:53:34 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+t_time_ms	print_log(t_philo *philo, char *msg)
+{
+	t_time_ms	time;
+
+	time = timestamp_ms(philo->timeval_start);
+	pthread_mutex_lock(&philo->stop->mutex);
+	if (philo->stop->state == FALSE)
+		printf("%li %i %s\n", time, philo->id, msg);
+	pthread_mutex_unlock(&philo->stop->mutex);
+	return (time);
+}
 
 void	msleep(t_philo *philo, t_time_ms time)
 {
@@ -21,7 +33,9 @@ void	msleep(t_philo *philo, t_time_ms time)
 	end = current + time;
 	while (current < end)
 	{
-		usleep(500);
+		if (check_death(philo) == TRUE)
+			return ;
+		usleep(100);
 		current = timestamp_ms(philo->timeval_start);
 	}
 }
