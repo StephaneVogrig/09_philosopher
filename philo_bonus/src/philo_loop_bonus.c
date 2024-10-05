@@ -28,7 +28,7 @@ void	*monitor(void *param)
 	philo = param;
 	while (TRUE)
 	{
-		time = timestamp_ms(philo->timeval_start);
+		time = get_time_ms(philo->timeval_start);
 		sem_wait(philo->sem.eat);
 		time_eat_last = philo->time_eat_last;
 		sem_post(philo->sem.eat);

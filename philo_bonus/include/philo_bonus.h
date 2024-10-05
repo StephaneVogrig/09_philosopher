@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 00:47:24 by svogrig           #+#    #+#             */
-/*   Updated: 2024/10/05 23:28:07 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/10/05 23:32:52 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void		exit_on_malloc_failure(const char *str);
 
 /* philo_utils ---------------------------------------------------------------*/
 
-t_time_ms	timestamp_ms(t_timeval start);
+t_time_ms	get_time_ms(t_timeval start);
 void		msleep(t_philo *philo, t_time_ms time);
 t_time_ms	print_log(t_philo *philo, char *msg);
 
