@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 20:01:24 by svogrig           #+#    #+#             */
-/*   Updated: 2024/10/04 16:14:50 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/10/05 21:31:58 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ static int	ft_atoi(char *str)
 
 void	arg_init(int argc, char **argv, t_philo *philo)
 {
+	if (argc > 6 || argc < 5)
+		exit_on_nbr_arg();
 	argv++;
 	philo->nb_philo = (int)ft_atoi(*argv++);
 	philo->time_die = ft_atoi(*argv++);

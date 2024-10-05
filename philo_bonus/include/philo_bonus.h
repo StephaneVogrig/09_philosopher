@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 00:47:24 by svogrig           #+#    #+#             */
-/*   Updated: 2024/10/04 22:04:43 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/10/05 21:16:01 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,25 +31,24 @@
 # define SUCCESS 1
 # define FALSE 0
 # define TRUE 1
-// # define FREE 0
-// # define IN_USE 1
 
-# define SEM_FORK		"/philo_fork"
-# define SEM_PRINT		"/philo_print"
-# define SEM_STOP		"/philo_stop"
-# define SEM_REMAIN	"/philo_remain"
+# define SEM_FORK	"/philo_bonus_fork"
+# define SEM_ACCESS	"/philo_bonus_acces"
+# define SEM_PRINT	"/philo_bonus_print"
+# define SEM_STOP	"/philo_bonus_stop"
+# define SEM_EAT	"/philo_bonus_eat"
 
 typedef long			t_time_ms;
 typedef struct timeval	t_timeval;
 
-typedef struct s_arg
-{
-	int			nb_philo;
-	int			eat_max;
-	t_time_ms	time_die;
-	t_time_ms	time_eat;
-	t_time_ms	time_sleep;
-}	t_arg;
+// typedef struct s_arg
+// {
+// 	int			nb_philo;
+// 	int			eat_max;
+// 	t_time_ms	time_die;
+// 	t_time_ms	time_eat;
+// 	t_time_ms	time_sleep;
+// }	t_arg;
 
 // typedef struct s_protected
 // {
@@ -60,9 +59,10 @@ typedef struct s_arg
 typedef struct s_semaphore
 {
 	sem_t	*forks;
+	sem_t	*access;
 	sem_t	*print;
 	sem_t	*stop;
-	sem_t	*access;
+	sem_t	*eat;
 }	t_sem;
 
 typedef struct s_philo
@@ -88,9 +88,9 @@ void	arg_init(int argc, char **argv, t_philo *philo);
 void		exit_on_invalid_argument(char *str);
 void		exit_on_overflow(char *str);
 void		exit_on_nbr_arg(void);
-// void		exit_on_malloc_failure(void);
+void		exit_on_malloc_failure(const char *str);
 
-// /* philo_utils ---------------------------------------------------------------*/
+/* philo_utils ---------------------------------------------------------------*/
 
 t_time_ms	timestamp_ms(t_timeval start);
 void		msleep(t_philo *philo, t_time_ms time);

@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 20:04:01 by svogrig           #+#    #+#             */
-/*   Updated: 2024/10/04 15:11:54 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/10/05 20:30:26 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ void	exit_on_nbr_arg(void)
 	exit (EXIT_SUCCESS);
 }
 
-// void	exit_on_malloc_failure(void)
-// {
-// 	printf("philo: malloc: out of memory\n");
-// 	exit (EXIT_FAILURE);
-// }
+void	exit_on_malloc_failure(const char *str)
+{
+	printf("%s: malloc: out of memory\n", str);
+	exit (EXIT_FAILURE);
+}
