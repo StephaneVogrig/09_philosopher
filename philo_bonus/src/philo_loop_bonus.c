@@ -20,26 +20,22 @@ void	stop(t_philo *philo)
 
 void	*monitor(void *param)
 {
-	t_philo *philo;
-
-	philo = param;
+	t_philo		*philo;
 	t_time_ms	time;
 	t_time_ms	delta;
 	t_time_ms	time_eat_last;
 
-	time = timestamp_ms(philo->timeval_start);
-	sem_wait(philo->sem.eat);
-	time_eat_last = philo->time_eat_last;
-	sem_post(philo->sem.eat);
-	delta = time - time_eat_last;
-	while (delta < philo->time_die)
+	philo = param;
+	while (TRUE)
 	{
-		usleep(100);
 		time = timestamp_ms(philo->timeval_start);
 		sem_wait(philo->sem.eat);
 		time_eat_last = philo->time_eat_last;
 		sem_post(philo->sem.eat);
 		delta = time - time_eat_last;
+		if (delta >= philo->time_die)
+			break ;
+		usleep(100);
 	}
 	sem_wait(philo->sem.print);
 	printf("%li %i died\n", time, philo->id);
@@ -63,7 +59,7 @@ void	eat(t_philo *philo)
 
 void	*philo_loop(void *param)
 {
-	t_philo	*philo;
+	t_philo		*philo;
 	pthread_t	thread;
 
 	philo = param;

@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:30:23 by svogrig           #+#    #+#             */
-/*   Updated: 2024/10/05 21:16:21 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/10/05 23:28:47 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ int	semaphore_init(t_sem *sem, int nb_philo)
 	semaphore_unlink();
 	sem->forks = sem_open(SEM_FORK, O_CREAT, O_RDWR, nb_philo);
 	sem->access = sem_open(SEM_ACCESS, O_CREAT, O_RDWR, 1);
-	sem->print = sem_open(SEM_PRINT, O_CREAT, O_RDWR , 1);
+	sem->print = sem_open(SEM_PRINT, O_CREAT, O_RDWR, 1);
 	sem->stop = sem_open(SEM_STOP, O_CREAT, O_RDWR, 0);
-	sem->eat = sem_open(SEM_EAT, O_CREAT, O_RDWR , 1);
+	sem->eat = sem_open(SEM_EAT, O_CREAT, O_RDWR, 1);
 	if (sem->forks == SEM_FAILED || sem->print == SEM_FAILED \
 		|| sem->print == SEM_FAILED || sem->print == SEM_FAILED)
 	{

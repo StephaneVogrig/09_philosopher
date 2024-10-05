@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 00:43:00 by svogrig           #+#    #+#             */
-/*   Updated: 2024/10/05 22:44:31 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/10/05 23:29:16 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	wait_end(t_philo *philo)
 	int	i;
 
 	i = philo->nb_philo;
-	while(i--)
+	while (i--)
 		sem_wait(philo->sem.stop);
 }
 
@@ -33,7 +33,7 @@ void	simulation_start(t_philo *philo, pid_t *philos)
 		if (philos[i] == -1)
 		{
 			printf("philo_bonus: philo_run: fork: No child created\n");
-			break;
+			break ;
 		}
 		if (philos[i] == 0)
 		{

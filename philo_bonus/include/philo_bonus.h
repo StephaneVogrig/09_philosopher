@@ -6,12 +6,12 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 00:47:24 by svogrig           #+#    #+#             */
-/*   Updated: 2024/10/05 21:16:01 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/10/05 23:28:07 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#ifndef PHILO_BONUS_H
+# define PHILO_BONUS_H
 
 # include <sys/types.h>
 # include <sys/wait.h>
@@ -41,21 +41,6 @@
 typedef long			t_time_ms;
 typedef struct timeval	t_timeval;
 
-// typedef struct s_arg
-// {
-// 	int			nb_philo;
-// 	int			eat_max;
-// 	t_time_ms	time_die;
-// 	t_time_ms	time_eat;
-// 	t_time_ms	time_sleep;
-// }	t_arg;
-
-// typedef struct s_protected
-// {
-// 	t_mutex	mutex;
-// 	int		state;
-// }	t_protected;
-
 typedef struct s_semaphore
 {
 	sem_t	*forks;
@@ -81,7 +66,7 @@ typedef struct s_philo
 
 /* arg -----------------------------------------------------------------------*/
 
-void	arg_init(int argc, char **argv, t_philo *philo);
+void		arg_init(int argc, char **argv, t_philo *philo);
 
 /* exit ----------------------------------------------------------------------*/
 
@@ -94,8 +79,6 @@ void		exit_on_malloc_failure(const char *str);
 
 t_time_ms	timestamp_ms(t_timeval start);
 void		msleep(t_philo *philo, t_time_ms time);
-// int			protected_get_state(t_protected *protected);
-// int			check_death(t_philo	*philo);
 t_time_ms	print_log(t_philo *philo, char *msg);
 
 /* philo_loop ----------------------------------------------------------------*/
