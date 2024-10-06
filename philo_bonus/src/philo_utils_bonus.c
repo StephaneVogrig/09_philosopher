@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 16:11:35 by svogrig           #+#    #+#             */
-/*   Updated: 2024/10/06 19:08:21 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/10/06 19:40:13 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ t_time_ms	print_log(t_philo *philo, char *msg)
 {
 	t_time_ms	time;
 
+	sem_wait(philo->sem.eat_all);
+	sem_post(philo->sem.eat_all);
 	time = get_time_ms(philo->timeval_start);
 	sem_wait(philo->sem.print);
 	printf("%li %i %s\n", time, philo->id, msg);

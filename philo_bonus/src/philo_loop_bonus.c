@@ -66,7 +66,10 @@ void	eat(t_philo *philo)
 	msleep(philo, philo->time_eat);
 	philo->eat_count++;
 	if (philo->eat_count == philo->eat_max)
+	{
+		sem_wait(philo->sem.eat_all);
 		sem_post(philo->sem.stop);
+	}
 }
 
 void	philo_loop(t_philo	*philo)
