@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:30:23 by svogrig           #+#    #+#             */
-/*   Updated: 2024/10/06 16:37:33 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/10/06 16:46:58 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,14 @@ int	semaphore_init(t_sem *sem, int nb_philo)
 	sem->print = sem_open(SEM_PRINT, O_CREAT, O_RDWR, 1);
 	sem->stop = sem_open(SEM_STOP, O_CREAT, O_RDWR, 0);
 	sem->eat_last = sem_open(SEM_EAT_LAST, O_CREAT, O_RDWR, 1);
-	if (sem->forks == SEM_FAILED || sem->print == SEM_FAILED \
-		|| sem->print == SEM_FAILED || sem->print == SEM_FAILED)
-	{
-		printf("philo_bonus: semaphore_init: failed\n");
-		return (FAILURE);
-	}
-	return (SUCCESS);
+	if (sem->forks != SEM_FAILED \
+			&& sem->access != SEM_FAILED \
+			&& sem->print != SEM_FAILED \
+			&& sem->stop != SEM_FAILED \
+			&& sem->eat_last != SEM_FAILED)
+		return (SUCCESS);
+	printf("philo_bonus: semaphore_init: failed\n");
+	return (FAILURE);
 }
 
 void	semaphore_clean(t_sem *sem)
