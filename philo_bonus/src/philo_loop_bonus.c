@@ -43,6 +43,16 @@ void	*monitor(void *param)
 	return (NULL);
 }
 
+void	take_forks(t_philo *philo)
+{
+	sem_wait(philo->sem.access);
+	sem_wait(philo->sem.forks);
+	print_log(philo, "has taken a fork");
+	sem_wait(philo->sem.forks);
+	print_log(philo, "has taken a fork");
+	sem_post(philo->sem.access);
+}
+
 void	eat(t_philo *philo)
 {
 	int	temp;
@@ -54,25 +64,23 @@ void	eat(t_philo *philo)
 	msleep(philo, philo->time_eat);
 	philo->eat_count++;
 	if (philo->eat_count == philo->eat_max)
-		sem_post(philo->sem.eat_finish);
+		sem_post(philo->sem.stop);
 }
 
-void	*philo_loop(void *param)
+void	philo_loop(t_philo	*philo)
 {
-	t_philo		*philo;
 	pthread_t	thread;
 
-	philo = param;
-	pthread_create(&thread, NULL, &monitor, philo);
+	if (pthread_create(&thread, NULL, &monitor, philo) != 0)
+	{
+		printf("philo_loop_bonus: philo_loop: pthread_create: failure\n");
+		stop(philo);
+		exit (EXIT_FAILURE);
+	}
 	pthread_detach(thread);
 	while (TRUE)
 	{
-		sem_wait(philo->sem.access);
-		sem_wait(philo->sem.forks);
-		print_log(philo, "has taken a fork");
-		sem_wait(philo->sem.forks);
-		print_log(philo, "has taken a fork");
-		sem_post(philo->sem.access);
+		take_forks(philo);
 		eat(philo);
 		sem_post(philo->sem.forks);
 		sem_post(philo->sem.forks);
@@ -80,5 +88,4 @@ void	*philo_loop(void *param)
 		msleep(philo, philo->time_sleep);
 		print_log(philo, "is thinking");
 	}
-	return (NULL);
 }
