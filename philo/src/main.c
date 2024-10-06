@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 00:43:00 by svogrig           #+#    #+#             */
-/*   Updated: 2024/09/30 21:14:30 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/10/06 03:18:09 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,19 +38,21 @@ void	philo_run(t_philo *philo, int n)
 		printf("philo: philo_run: malloc: out of memory\n");
 		return ;
 	}
-	i = 0;
-	while (i < n)
+	i = -1;
+	while (++i < n)
 	{
 		if (pthread_create(&thread[i], NULL, &philo_loop, &philo[i]) != 0)
+		{
+			printf("philo: philo_run: ptrhead_create: failure\n");
+			pthread_mutex_lock(&philo->stop->mutex);
+			philo->stop->state = TRUE;
+			pthread_mutex_unlock(&philo->stop->mutex);
 			break ;
-		i++;
+		}
 	}
-	i = 0;
-	while (i < n)
-	{
+	i = -1;
+	while (++i < n)
 		pthread_join(thread[i], NULL);
-		i++;
-	}
 	free(thread);
 }
 
