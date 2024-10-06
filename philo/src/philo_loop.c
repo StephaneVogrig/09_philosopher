@@ -27,6 +27,9 @@ void	eat(t_philo *philo)
 
 	temp = 0;
 	philo->eat_last = print_log(philo, "is eating");
+	msleep(philo, philo->time_eat);
+	if (protected_get_state(philo->stop) == TRUE)
+		return ;
 	philo->eat_count++;
 	if (philo->eat_count == philo->eat_max)
 	{
@@ -41,7 +44,6 @@ void	eat(t_philo *philo)
 			pthread_mutex_unlock(&philo->stop->mutex);
 		}
 	}
-	msleep(philo, philo->time_eat);
 }
 
 void	take_fork(t_philo *philo, t_protected *fork)
