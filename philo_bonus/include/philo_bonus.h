@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 00:47:24 by svogrig           #+#    #+#             */
-/*   Updated: 2024/10/06 19:28:59 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/10/06 21:19:04 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void		stop(t_philo *philo);
 
 void		philo_loop(t_philo *philo);
 
-/* philo_loop ----------------------------------------------------------------*/
+/* semaphore -----------------------------------------------------------------*/
 
 int			semaphore_init(t_sem *sem, int nb_philo);
 void		semaphore_close(t_sem *sem);
