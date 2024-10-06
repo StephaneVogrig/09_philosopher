@@ -6,19 +6,32 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 00:43:00 by svogrig           #+#    #+#             */
-/*   Updated: 2024/10/05 23:29:16 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/10/06 00:32:59 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-void	wait_end(t_philo *philo)
+void	*wait_end(void *param)
 {
+	t_philo	*philo;
 	int	i;
 
+	philo = param;
 	i = philo->nb_philo;
 	while (i--)
-		sem_wait(philo->sem.stop);
+		sem_wait(philo->sem.eat_finish);
+	sem_post(philo->sem.stop);
+	sem_wait(philo->sem.print);
+	return (NULL);
+}
+
+void	monitor_eat_start(t_philo *philo)
+{
+	pthread_t	thread;
+
+	pthread_create(&thread, NULL, &wait_end, philo);
+	pthread_detach(thread);
 }
 
 void	simulation_start(t_philo *philo, pid_t *philos)
@@ -74,8 +87,9 @@ int	main(int argc, char **argv)
 	{
 		philo.time_eat_last = 0;
 		philo.eat_count = 0;
+		monitor_eat_start(&philo);
 		simulation_start(&philo, philos);
-		wait_end(&philo);
+		sem_wait(philo.sem.stop);
 		philo_clean(philos, philo.nb_philo);
 	}
 	else

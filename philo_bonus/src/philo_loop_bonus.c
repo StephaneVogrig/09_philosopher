@@ -29,9 +29,9 @@ void	*monitor(void *param)
 	while (TRUE)
 	{
 		time = get_time_ms(philo->timeval_start);
-		sem_wait(philo->sem.eat);
+		sem_wait(philo->sem.eat_last);
 		time_eat_last = philo->time_eat_last;
-		sem_post(philo->sem.eat);
+		sem_post(philo->sem.eat_last);
 		delta = time - time_eat_last;
 		if (delta >= philo->time_die)
 			break ;
@@ -48,13 +48,13 @@ void	eat(t_philo *philo)
 	int	temp;
 
 	temp = 0;
-	sem_wait(philo->sem.eat);
+	sem_wait(philo->sem.eat_last);
 	philo->time_eat_last = print_log(philo, "is eating");
-	sem_post(philo->sem.eat);
+	sem_post(philo->sem.eat_last);
+	msleep(philo, philo->time_eat);
 	philo->eat_count++;
 	if (philo->eat_count == philo->eat_max)
-		sem_post(philo->sem.stop);
-	msleep(philo, philo->time_eat);
+		sem_post(philo->sem.eat_finish);
 }
 
 void	*philo_loop(void *param)
