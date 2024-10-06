@@ -6,7 +6,7 @@
 /*   By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 00:47:24 by svogrig           #+#    #+#             */
-/*   Updated: 2024/10/06 05:07:04 by svogrig          ###   ########.fr       */
+/*   Updated: 2024/10/06 16:37:45 by svogrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@
 # define SEM_PRINT		"/philo_bonus_print"
 # define SEM_STOP		"/philo_bonus_stop"
 # define SEM_EAT_LAST	"/philo_bonus_eat"
-# define SEM_EAT_FINISH	"/philo_bonus_meal"
 
 typedef long			t_time_ms;
 typedef struct timeval	t_timeval;
@@ -49,7 +48,6 @@ typedef struct s_semaphore
 	sem_t	*print;
 	sem_t	*stop;
 	sem_t	*eat_last;
-	sem_t	*eat_finish;
 }	t_sem;
 
 typedef struct s_philo
